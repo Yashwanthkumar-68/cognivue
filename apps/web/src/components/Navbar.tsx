@@ -28,7 +28,8 @@ export const Navbar: React.FC = () => {
   } = useStudioStore();
 
   const navItems: { screen: StudioScreen; label: string; icon: React.ReactNode; badge?: string }[] = [
-    { screen: 'skilltrace_chat', label: 'SkillTrace Chat', icon: <Sparkles className="w-4 h-4 text-cyan-400" />, badge: 'Universal' },
+    { screen: 'chat_first', label: 'Chat Studio', icon: <Sparkles className="w-4 h-4 text-cyan-400" />, badge: 'Chat-First' },
+    { screen: 'skilltrace_chat', label: 'SkillTrace Inspector', icon: <ScanEye className="w-4 h-4 text-indigo-400" /> },
     { screen: 'knowledge_graph', label: 'Knowledge Graph', icon: <BrainCircuit className="w-4 h-4" /> },
     { screen: 'learning_twin', label: 'Learning Twin', icon: <GraduationCap className="w-4 h-4" />, badge: twin ? `${Math.round(twin.overallMastery * 100)}%` : undefined },
     { screen: 'misconception_center', label: 'Misconception Engine', icon: <AlertTriangle className="w-4 h-4 text-amber-400" /> },

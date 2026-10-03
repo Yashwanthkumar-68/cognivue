@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useStudioStore } from './stores/useStudioStore.js';
 import { Navbar } from './components/Navbar.js';
 import { LandingScreen } from './screens/LandingScreen.js';
+import { ChatFirstStudio } from './screens/ChatFirstStudio.js';
 import { KnowledgeGraphScreen } from './screens/KnowledgeGraphScreen.js';
 import { MisconceptionCenterScreen } from './screens/MisconceptionCenterScreen.js';
 import { ElahEditorScreen } from './screens/ElahEditorScreen.js';
@@ -20,6 +21,8 @@ export const App: React.FC = () => {
 
   const renderActiveScreen = () => {
     switch (currentScreen) {
+      case 'chat_first':
+        return <ChatFirstStudio />;
       case 'landing':
         return <LandingScreen />;
       case 'knowledge_graph':
@@ -45,7 +48,7 @@ export const App: React.FC = () => {
       case 'settings':
         return <SettingsScreen />;
       default:
-        return <KnowledgeGraphScreen />;
+        return <ChatFirstStudio />;
     }
   };
 

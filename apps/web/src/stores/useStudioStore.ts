@@ -13,6 +13,7 @@ import {
 import * as api from '../services/api.js';
 
 export type StudioScreen =
+  | 'chat_first'
   | 'landing'
   | 'spaces'
   | 'import'
@@ -77,7 +78,7 @@ interface StudioState {
 }
 
 export const useStudioStore = create<StudioState>((set, get) => ({
-  currentScreen: 'landing',
+  currentScreen: 'chat_first',
   activeSpaceId: 'space_dbms_demo',
   spaceTitle: 'DBMS — Final Exam Preparation',
   spaceGoal: 'Master Relational Normalization, eliminate 3NF misconceptions, and ace the exam.',
