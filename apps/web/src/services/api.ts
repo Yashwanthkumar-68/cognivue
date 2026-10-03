@@ -91,3 +91,13 @@ export async function switchAIProvider(mode: 'demo' | 'gemma' | 'openweight') {
   });
   return res.json();
 }
+
+export async function sendChatMessage(message: string, attachments: any[] = []) {
+  const res = await fetch(`${API_BASE}/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, attachments })
+  });
+  return res.json();
+}
+

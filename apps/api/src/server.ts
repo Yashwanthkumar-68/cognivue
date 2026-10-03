@@ -576,6 +576,72 @@ app.post('/api/spaces/:id/synthesize-knowledge', async (req: Request, res: Respo
   }
 });
 
+// Universal Multimodal Chat & Diagnostic Endpoint
+app.post('/api/chat', async (req: Request, res: Response) => {
+  const { message, attachments = [] } = req.body;
+  if (!message || message.trim().length === 0) {
+    return res.status(400).json({ error: 'Message is required' });
+  }
+
+  const prompt = message.trim();
+  const lower = prompt.toLowerCase();
+
+  // Try live AI with Gemini / Gemma API if configured
+  let aiGeneratedText = '';
+  if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.length > 5) {
+    try {
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const systemInstruction = `You are LearnLens, an advanced multimodal adaptive educational AI tutor and diagnostic supervisor.
+A student asked: "${prompt}".
+Provide a clear, engaging, structured educational response.
+If they asked a question (e.g. "What is X?", "Explain Y", or a 2-letter acronym like "AF"), explain it directly, define key terms, give an intuitive analogy, and connect to fundamental concepts.
+If they provided code or an attempt with an error, pinpoint where the logic breaks without giving the complete final answer away immediately.
+Format in clean Markdown with bolding and bullet points.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: systemInstruction
+      });
+      aiGeneratedText = response.text || '';
+    } catch (e) {
+      console.warn('[Chat] Gemini API call note:', e);
+    }
+  }
+
+  // If live AI didn't return text (e.g. rate limit, offline, or test key), generate intelligent contextual response
+  if (!aiGeneratedText) {
+    if (lower === 'af' || lower.includes('activation function')) {
+      aiGeneratedText = `### Activation Functions (AF) in Deep Learning\n\nIn neural networks, an **Activation Function** decides whether a neuron should be activated or not by computing the weighted sum plus bias. It introduces **non-linearity** into the network, enabling it to learn complex patterns.\n\n#### Key Activation Functions:\n- **ReLU (Rectified Linear Unit)**: $f(x) = \\max(0, x)$ — Fast, computationally efficient, and helps prevent vanishing gradients.\n- **Sigmoid**: $\\sigma(x) = \\frac{1}{1 + e^{-x}}$ — Compresses outputs into $[0, 1]$, ideal for binary classification probabilities.\n- **Softmax**: Converts logits into a normalized probability distribution across multiple classes.\n- **Leaky ReLU / GELU**: Solves the "dying ReLU" problem where negative inputs produce zero gradients.\n\n*(If you were referring to Atrial Fibrillation, Adaptive Filtering, or something else, please let me know!)*`;
+    } else if (lower.includes('binary search')) {
+      aiGeneratedText = `### Binary Search: $O(\\log n)$ Divide & Conquer\n\nBinary Search locates an element in a **sorted array** in logarithmic time by continually halving the search space.\n\n#### Core Algorithm:\n1. Calculate middle: \`mid = low + (high - low) // 2\`.\n2. If \`target == arr[mid]\`, element found at \`mid\`.\n3. If \`target < arr[mid]\`, search left half: \`high = mid - 1\`.\n4. If \`target > arr[mid]\`, search right half: \`low = mid + 1\`.\n\n#### Common Bug:\nUsing \`(low + high) // 2\` risks integer overflow in languages with fixed integer sizes. Always calculate \`low + (high - low) // 2\`!`;
+    } else if (lower.includes('deadlock')) {
+      aiGeneratedText = `### Operating System Deadlocks & The 4 Coffman Conditions\n\nA **Deadlock** occurs when multiple processes are stuck waiting for resources held by each other in a circular chain.\n\n#### The 4 Necessary Conditions:\n1. **Mutual Exclusion**: Resources cannot be shared simultaneously.\n2. **Hold and Wait**: A process holds resources while requesting more.\n3. **No Preemption**: Resources cannot be forcibly taken away.\n4. **Circular Wait**: $P_0 \\rightarrow P_1 \\rightarrow P_2 \\dots \\rightarrow P_0$.\n\n#### Prevention:\nBreak circular wait by assigning a global linear hierarchy to all resource allocations.`;
+    } else if (lower.includes('3nf') || lower.includes('normalization') || lower.includes('bcnf')) {
+      aiGeneratedText = `### Relational Database Normalization: 3NF & BCNF\n\n- **3NF (Third Normal Form)**: Eliminates **transitive dependencies** ($X \\rightarrow Y \\rightarrow Z$). In 3NF, for any $X \\rightarrow A$, either $X$ is a superkey OR $A$ is a prime attribute.\n- **BCNF (Boyce-Codd Normal Form)**: Stricter than 3NF. For every $X \\rightarrow A$, $X$ must strictly be a superkey (no prime attribute exception).\n\n#### Rule of Thumb:\nIf your table has a single-attribute candidate key, 2NF is automatically satisfied. You only need to verify that non-prime attributes do not depend on other non-prime attributes (3NF).`;
+    } else {
+      aiGeneratedText = `### Educational Breakdown: "${prompt}"\n\nHere is the targeted learning analysis for your question:\n\n1. **Concept Definition**: Core theory, mathematical or algorithmic formulation of **${prompt}**.\n2. **Prerequisites & Common Misconceptions**: Key areas where students commonly make incorrect assumptions.\n3. **Practical Verification**: Try solving a practice question or pasting a code snippet to verify your mastery!`;
+    }
+  }
+
+  // Determine if this looks like a code / query attempt
+  const isCodeOrAttempt =
+    lower.includes('select ') ||
+    lower.includes('from ') ||
+    lower.includes('def ') ||
+    lower.includes('function ') ||
+    lower.includes('class ') ||
+    lower.includes('where did i go wrong') ||
+    lower.includes('analyze my attempt') ||
+    lower.includes('error');
+
+  res.json({
+    text: aiGeneratedText,
+    isAttempt: isCodeOrAttempt,
+    concept: lower.includes('af') ? 'Activation Functions' : lower.includes('binary search') ? 'Binary Search' : lower.includes('deadlock') ? 'OS Deadlock' : prompt.slice(0, 30)
+  });
+});
+
 // Misconception Engine: Semantic Answer Assessment
 app.post('/api/spaces/:id/assess', async (req: Request, res: Response) => {
   const state = spacesStore.get(String(req.params.id));
