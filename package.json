@@ -1,0 +1,33 @@
+{
+  "name": "learnlens",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LearnLens — Multimodal Adaptive Learning Studio with Gemma 4, Open-Weight Reasoning, and elah",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "keywords": [
+    "gemma4",
+    "open-weight-ai",
+    "elah",
+    "learning-twin",
+    "adaptive-learning",
+    "knowledge-graph",
+    "hackathon"
+  ],
+  "author": "LearnLens Team",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
