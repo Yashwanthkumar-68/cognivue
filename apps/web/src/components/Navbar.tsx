@@ -69,9 +69,10 @@ export const Navbar: React.FC = () => {
             onChange={(e) => setProviderMode(e.target.value as any)}
             className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded px-2 py-0.5 font-mono focus:outline-none focus:border-cyan-500"
           >
-            <option value="demo">Demo Benchmark (Instant Offline)</option>
+            <option value="hybrid">⚡ Hybrid: Gemma 4 + Ollama DeepSeek-R1</option>
             <option value="gemma">Google Gemma 4 (Live API)</option>
-            <option value="openweight">Open-Source Ollama/vLLM</option>
+            <option value="openweight">Open-Source Ollama (deepseek-r1:1.5b)</option>
+            <option value="demo">Demo Benchmark (Instant Offline)</option>
           </select>
           <button
             onClick={() => loadDemoBenchmark()}

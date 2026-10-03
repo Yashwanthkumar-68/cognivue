@@ -55,7 +55,7 @@ interface StudioState {
   // Loaders & AI Provider
   isLoading: boolean;
   statusMessage: string;
-  providerMode: 'demo' | 'gemma' | 'openweight';
+  providerMode: 'demo' | 'gemma' | 'openweight' | 'hybrid';
 
   // Actions
   setScreen: (screen: StudioScreen) => void;
@@ -64,7 +64,7 @@ interface StudioState {
   setSelectedConcept: (id: string | null) => void;
   setSelectedSource: (id: string | null) => void;
   setSelectedConflict: (id: string | null) => void;
-  setProviderMode: (mode: 'demo' | 'gemma' | 'openweight') => void;
+  setProviderMode: (mode: 'demo' | 'gemma' | 'openweight' | 'hybrid') => void;
 
   // Async workflows
   loadDemoBenchmark: () => Promise<void>;
@@ -101,7 +101,7 @@ export const useStudioStore = create<StudioState>((set, get) => ({
 
   isLoading: false,
   statusMessage: '',
-  providerMode: 'demo',
+  providerMode: 'hybrid',
 
   setScreen: (screen) => set({ currentScreen: screen }),
   setFrame: (frame) => set({ currentFrame: frame }),

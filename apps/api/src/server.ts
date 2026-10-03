@@ -35,17 +35,21 @@ const openWeightProvider = new OpenWeightProvider({
   model: process.env.OPEN_SOURCE_MODEL || 'deepseek-ai/DeepSeek-R1'
 });
 
-let currentProviderMode: 'demo' | 'gemma' | 'openweight' =
-  (process.env.AI_PROVIDER as any) || 'demo';
+let currentProviderMode: 'demo' | 'gemma' | 'openweight' | 'hybrid' =
+  (process.env.AI_PROVIDER as any) || 'hybrid';
 
 function getActiveReasoningProvider() {
-  if (currentProviderMode === 'openweight') return openWeightProvider;
+  if (currentProviderMode === 'hybrid' || currentProviderMode === 'openweight') {
+    return openWeightProvider;
+  }
   if (currentProviderMode === 'gemma') return gemmaProvider;
   return demoProvider;
 }
 
 function getActiveMultimodalProvider() {
-  if (currentProviderMode === 'gemma') return gemmaProvider;
+  if (currentProviderMode === 'hybrid' || currentProviderMode === 'gemma') {
+    return gemmaProvider;
+  }
   return demoProvider;
 }
 
@@ -363,11 +367,11 @@ app.get('/api/health', (req: Request, res: Response) => {
 // Provider toggle
 app.post('/api/provider/switch', (req: Request, res: Response) => {
   const { mode } = req.body;
-  if (mode === 'demo' || mode === 'gemma' || mode === 'openweight') {
+  if (mode === 'demo' || mode === 'gemma' || mode === 'openweight' || mode === 'hybrid') {
     currentProviderMode = mode;
     return res.json({ success: true, activeProvider: mode });
   }
-  res.status(400).json({ error: 'Invalid provider mode. Choose demo, gemma, or openweight.' });
+  res.status(400).json({ error: 'Invalid provider mode. Choose demo, gemma, openweight, or hybrid.' });
 });
 
 // 1-Click Bootstrap for DBMS Hackathon Benchmark
