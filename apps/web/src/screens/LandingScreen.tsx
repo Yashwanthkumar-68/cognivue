@@ -61,18 +61,26 @@ export const LandingScreen: React.FC = () => {
         {/* Primary CTA Buttons */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <button
-            onClick={() => loadDemoBenchmark()}
-            disabled={isLoading}
-            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-slate-950 font-bold text-sm shadow-glow-cyan flex items-center gap-2.5 transition-all transform hover:-translate-y-0.5 disabled:opacity-60"
+            onClick={() => setScreen('skilltrace_chat')}
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-slate-950 font-bold text-sm shadow-glow-cyan flex items-center gap-2.5 transition-all transform hover:-translate-y-0.5"
           >
             <Sparkles className="w-4 h-4 fill-current" />
-            <span>Launch DBMS Final Exam Demo</span>
+            <span>Open Universal SkillTrace Studio</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
           <button
+            onClick={() => loadDemoBenchmark()}
+            disabled={isLoading}
+            className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-sm flex items-center gap-2.5 transition-all"
+          >
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span>1-Click DBMS Exam Demo</span>
+          </button>
+
+          <button
             onClick={() => setScreen('knowledge_graph')}
-            className="px-6 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 font-semibold text-sm flex items-center gap-2 transition-all"
+            className="px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-semibold text-sm flex items-center gap-2 transition-all"
           >
             <span>Explore Knowledge Studio</span>
             <ArrowRight className="w-4 h-4 text-slate-400" />

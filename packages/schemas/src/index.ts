@@ -6,3 +6,4 @@ export * from './gap.js';
 export * from './conflict.js';
 export * from './twin.js';
 export * from './elahPlan.js';
+export * from './skilltrace.js';

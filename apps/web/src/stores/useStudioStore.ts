@@ -23,6 +23,7 @@ export type StudioScreen =
   | 'gap_map'
   | 'conflict_viewer'
   | 'lesson_editor'
+  | 'skilltrace_chat'
   | 'exam_mode'
   | 'settings';
 

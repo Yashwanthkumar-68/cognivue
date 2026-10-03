@@ -15,11 +15,14 @@ import {
 import { DemoProvider, GemmaProvider, OpenWeightProvider } from '@learnlens/ai-core';
 import { EditValidator, LessonHistoryManager } from '@learnlens/lesson-engine';
 
+import { observeRouter } from './routes/observe.js';
+
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
+app.use('/api/observe', observeRouter);
 
 const PORT = process.env.PORT || 4000;
 

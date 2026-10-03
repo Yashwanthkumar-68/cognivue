@@ -5,6 +5,7 @@ import { LandingScreen } from './screens/LandingScreen.js';
 import { KnowledgeGraphScreen } from './screens/KnowledgeGraphScreen.js';
 import { MisconceptionCenterScreen } from './screens/MisconceptionCenterScreen.js';
 import { ElahEditorScreen } from './screens/ElahEditorScreen.js';
+import { SkillTraceChatScreen } from './screens/SkillTraceChatScreen.js';
 import { LearningTwinScreen } from './screens/LearningTwinScreen.js';
 import { LearningGapMapScreen } from './screens/LearningGapMapScreen.js';
 import { SourceConflictScreen } from './screens/SourceConflictScreen.js';
@@ -27,6 +28,8 @@ export const App: React.FC = () => {
         return <MisconceptionCenterScreen />;
       case 'lesson_editor':
         return <ElahEditorScreen />;
+      case 'skilltrace_chat':
+        return <SkillTraceChatScreen />;
       case 'learning_twin':
         return <LearningTwinScreen />;
       case 'gap_map':
